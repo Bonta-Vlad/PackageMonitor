@@ -1,4 +1,4 @@
-# Analiza și organizarea operațiilor dpkg. Package Monitor Extended
+# Package Monitor Extended. Analiza și organizarea operațiilor dpkg
 
 ## Descriere generală: 
 Acest proiect extinde funcționalitățile unui sistem de tip *PackageMonitor*,
