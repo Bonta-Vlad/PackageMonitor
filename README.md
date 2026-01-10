@@ -25,9 +25,9 @@ Proiectul este implementat în Bash și este structurat modular, folosind două 
 ├── pkgmon.sh
 └── Packages/
     ├── apt/
-    │ └── ops.txt
+    │   └── ops.txt
     ├── curl/
-    │ └── ops.txt
+    │   └── ops.txt
     └── ...
 ```
 
