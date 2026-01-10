@@ -90,15 +90,16 @@ Directorul `Packages/` este generat automat și conține câte un subdirector pe
     
   Comenzi utilizate:
   
-    - `case`: utilizată pentru a selecta comportamentul scriptului în funcție de primul argument primit din
-    linia de comandă (`$1`), permițând implementarea mai multor funcșionalități într-un singur script.
-    - `for`: Bucla `for` este folosită pentru a parcurge toate directoarele corespunzătoare pachetelor din
+    - `case`: utilizată pentru a selecta comportamentul scriptului în funcție de primul argument 
+    primit din linia de comandă (`$1`), permițând implementarea mai multor funcșionalități într-un           singur script.
+    - `for`: Bucla `for` este folosită pentru a parcurge toate directoarele corespunzătoare 
+    pachetelor din
     directorul `Packages/`, permițând procesarea individuală a fiecărui pachet.
-    - `ls`: utilizată pentru a lista subdirectoarele din `Packages/`, fiecare subdirector reprezentând un 
-    pachet monitorizat
+    - `ls`: utilizată pentru a lista subdirectoarele din `Packages/`, fiecare subdirector reprezentând
+    un pachet monitorizat
     - `grep`: folosită pentru a filtra liniile din fișierul `ops.txt` corespunzătoare operațiilor de tip 
-    `installed` sau `remove`. Opțiunea implicită permite selectarea doar a liniilor relevante pentru analiza
-    stării pachetului
+    `installed` sau `remove`. Opțiunea implicită permite selectarea doar a liniilor relevante pentru
+    analiza stării pachetului
     - `tail`: Comanda `tail -1` este utilizată pentru a selecta ultima apariție a unei operații
     de tip `installed` sau `remove`, considerată cea mai recentă operație pentru pachetul respectiv.
     - `if`: Structura condițională `if` este utilizată pentru a compara datele ultimei instalări și ale 
