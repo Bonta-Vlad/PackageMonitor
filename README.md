@@ -24,9 +24,11 @@ Directorul `Packages/` este generat automat și conține câte un subdirector pe
 ### Script 1 (monitor.sh)
   Primul script analizează fișierul /var/log/dpkg.log și identifică operațiile relevante asupra pachetelor,
   precum:
+  
     - instalare(installed)
     - dezinstalare(uninstall)
     - instalare parțială(half-installed)
+    
   Pentru fiecare pachet identificat, scriptul creează un director și salvează operațiilr asociate într-un
   fișier ops.txt
   
