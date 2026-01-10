@@ -8,10 +8,10 @@ Proiectul este implementat în Bash și este structurat modular, folosind două 
   -un script pentru interogarea și analiza informațiilor colectate
 
 ## Cerințe
-  -Sistem de operare Linux
-  -Bash
-  -Acces la fișierul `/var/log/dpkg.log`
-  -Utilitare standard: `awk`, `grep`, `sort`, `xargs`
+  - Sistem de operare Linux
+  - Bash
+  - Acces la fișierul `/var/log/dpkg.log`
+  - Utilitare standard: `awk`, `grep`, `sort`, `xargs`
 
 ## Structura proiectului
 
@@ -22,24 +22,24 @@ Directorul `Packages/` este generat automat și conține câte un subdirector pe
 ### Script 1 (monitor.sh)
   Primul script analizează fișierul /var/log/dpkg.log și identifică operațiile relevante asupra pachetelor,
   precum:
-    -instalare(installed)
-    -dezinstalare(uninstall)
-    -instalare parțială(half-installed)
+    - instalare(installed)
+    - dezinstalare(uninstall)
+    - instalare parțială(half-installed)
   Pentru fiecare pachet identificat, scriptul creează un director și salvează operațiilr asociate într-un
   fișier ops.txt
   Variabile:
-    -L_FILE: calea către fișierul de log dpkg.log
+    - L_FILE: calea către fișierul de log dpkg.log
   Flux de execuție:
-    -Se filtrează liniile relevante din dpkg.log
-    -Se extrag numele pachetelor
-    -Se creează directoare unice pentru fiecare pachet
-    -Se salvează istoricul operațiilor în fișiere separate
+    - Se filtrează liniile relevante din dpkg.log
+    - Se extrag numele pachetelor
+    - Se creează directoare unice pentru fiecare pachet
+    - Se salvează istoricul operațiilor în fișiere separate
   Comenzi utilizate:
-    -awk: procesarea și filtrarea fișierului de log
-    -sort -u: eliminarea intrărilor duplicate
-    -xargz: executarea comenzilor pentru fiecare pachet
-    -mkdir: crearea structurii de directoare
-    -grep: filtrarea operațiilor pentru fiecare pachet
+    - awk: procesarea și filtrarea fișierului de log
+    - sort -u: eliminarea intrărilor duplicate
+    - xargz: executarea comenzilor pentru fiecare pachet
+    - mkdir: crearea structurii de directoare
+    - grep: filtrarea operațiilor pentru fiecare pachet
 
 ### Script 2 (pkgmon.sh)
   Al doilea script oferă un front-end simplu pentru interogarea informațiilor generate de primul script.
@@ -47,31 +47,31 @@ Directorul `Packages/` este generat automat și conține câte un subdirector pe
   Scriptul se bazează exclusiv pe structura creată în monitor.sh
 
   Argumente interogabile:
-    -installed: Afișează pachetele pentru care ultima operație înregistrată este o instalare
-    -removed: Afișează pachetele pentru care ultima operație este o dezinstalare
-    -history <nume_pachet>: Afișează istoricul complet al operațiilor pentru pachetul specificat
+    - installed: Afișează pachetele pentru care ultima operație înregistrată este o instalare
+    - removed: Afișează pachetele pentru care ultima operație este o dezinstalare
+    - history <nume_pachet>: Afișează istoricul complet al operațiilor pentru pachetul specificat
   Flux de execuție:
-    -Se parcurg directoarele din `Packages/`
-    -Se identifică ultimele operații de tip install și remove
-    -Se compară datele operațiilor pentru determinarea stării finale
-    -Se afișează rezultatul corespunzător cererii utilizatorului
+    - Se parcurg directoarele din `Packages/`
+    - Se identifică ultimele operații de tip install și remove
+    - Se compară datele operațiilor pentru determinarea stării finale
+    - Se afișează rezultatul corespunzător cererii utilizatorului
   Comenzi utilizate:
-    -case: utilizată pentru a selecta comportamentul scriptului în funcție de primul argument primit din
+    - case: utilizată pentru a selecta comportamentul scriptului în funcție de primul argument primit din
     linia de comandă (`$1`), permițând implementarea mai multor funcșionalități într-un singur script.
-    -for: Bucla `for` este folosită pentru a parcurge toate directoarele corespunzătoare pachetelor din
+    - for: Bucla `for` este folosită pentru a parcurge toate directoarele corespunzătoare pachetelor din
     directorul `Packages/`, permițând procesarea individuală a fiecărui pachet.
-    -ls: utilizată pentru a lista subdirectoarele din `Packages/`, fiecare subdirector reprezentând un 
+    - ls: utilizată pentru a lista subdirectoarele din `Packages/`, fiecare subdirector reprezentând un 
     pachet monitorizat
-    -grep: folosită pentru a filtra liniile din fișierul `ops.txt` corespunzătoare operațiilor de tip 
+    - grep: folosită pentru a filtra liniile din fișierul `ops.txt` corespunzătoare operațiilor de tip 
     `installed` sau `remove`. Opțiunea implicită permite selectarea doar a liniilor relevante pentru analiza
     stării pachetului
-    -tail: Comanda `tail -1` este utilizată pentru a selecta ultima apariție a unei operații
+    - tail: Comanda `tail -1` este utilizată pentru a selecta ultima apariție a unei operații
     de tip `installed` sau `remove`, considerată cea mai recentă operație pentru pachetul respectiv.
-    -if: Structura condițională `if` este utilizată pentru a compara datele ultimei instalări și ale 
+    - if: Structura condițională `if` este utilizată pentru a compara datele ultimei instalări și ale 
     ultimei dezinstalări, determinând starea finală a pachetului (instalat sau eliminat).
-    -cat: Comanda `cat` este utilizată în cazul opțiunii `history` pentru afișarea completă a 
+    - cat: Comanda `cat` este utilizată în cazul opțiunii `history` pentru afișarea completă a 
     istoricului operațiilor unui pachet.
-    -Variabila `$1`: reprezintă opțiunea selectată de utilizator (ex. `installed`, `removed`)
-    -Variabila `$2`: reprezintă numele pachetului pentru care se solicită istoricul
+    - Variabila `$1`: reprezintă opțiunea selectată de utilizator (ex. `installed`, `removed`)
+    - Variabila `$2`: reprezintă numele pachetului pentru care se solicită istoricul
     
     
