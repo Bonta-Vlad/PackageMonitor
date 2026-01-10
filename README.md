@@ -19,6 +19,7 @@ Proiectul este implementat în Bash și este structurat modular, folosind două 
 
 ## Structura datelor generate
 
+\`\`\`
   .
   |-monitor.sh
   |-pkgmon.sh
@@ -28,6 +29,7 @@ Proiectul este implementat în Bash și este structurat modular, folosind două 
     |-curl/
     | |_ops.txt
     |_...
+\`\`\`
 
 Directorul `Packages/` este generat automat și conține câte un subdirector pentru fiecare pachet detectat
 în fișierul de log.
