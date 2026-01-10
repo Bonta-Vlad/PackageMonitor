@@ -1,6 +1,7 @@
 # Analiza și organizarea operațiilor dpkg. Package Monitor Extended
 
-## Descriere generală: Acest proiect extinde funcționalitățile unui sistem de tip *PackageMonitor*,
+## Descriere generală: 
+Acest proiect extinde funcționalitățile unui sistem de tip *PackageMonitor*,
 având ca scop analiza și monitorizarea operațiilor efectuate asupra pachetelor
 dintr-un sistem Linux, folosind fișierul de log `/var/log/dpkg.log`.
 
