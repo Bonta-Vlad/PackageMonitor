@@ -23,15 +23,12 @@ Proiectul este implementat în Bash și este structurat modular, folosind două 
 .
 ├── monitor.sh
 ├── pkgmon.sh
-├── undo_cache.txt
-├── total_size.db
 └── Packages/
-├── apt/
-│ ├── ops.txt
-│ └── size.txt
-├── curl/
-│ └── ops.txt
-└── ...
+    ├── apt/
+    │ └── ops.txt
+    ├── curl/
+    │ └── ops.txt
+    └── ...
 ```
 
 Directorul `Packages/` este generat automat și conține câte un subdirector pentru fiecare pachet detectat
