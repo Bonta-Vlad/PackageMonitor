@@ -33,15 +33,18 @@ Directorul `Packages/` este generat automat și conține câte un subdirector pe
   fișier ops.txt
   
   Variabile:
+  
     - L_FILE: calea către fișierul de log dpkg.log
     
   Flux de execuție:
+  
     - Se filtrează liniile relevante din dpkg.log
     - Se extrag numele pachetelor
     - Se creează directoare unice pentru fiecare pachet
     - Se salvează istoricul operațiilor în fișiere separate
     
   Comenzi utilizate:
+  
     - awk: procesarea și filtrarea fișierului de log
     - sort -u: eliminarea intrărilor duplicate
     - xargz: executarea comenzilor pentru fiecare pachet
@@ -56,17 +59,20 @@ Directorul `Packages/` este generat automat și conține câte un subdirector pe
   Scriptul se bazează exclusiv pe structura creată în monitor.sh
 
   Argumente interogabile:
+  
     - installed: Afișează pachetele pentru care ultima operație înregistrată este o instalare
     - removed: Afișează pachetele pentru care ultima operație este o dezinstalare
     - history <nume_pachet>: Afișează istoricul complet al operațiilor pentru pachetul specificat
     
   Flux de execuție:
+  
     - Se parcurg directoarele din `Packages/`
     - Se identifică ultimele operații de tip install și remove
     - Se compară datele operațiilor pentru determinarea stării finale
     - Se afișează rezultatul corespunzător cererii utilizatorului
     
   Comenzi utilizate:
+  
     - case: utilizată pentru a selecta comportamentul scriptului în funcție de primul argument primit din
     linia de comandă (`$1`), permițând implementarea mai multor funcșionalități într-un singur script.
     - for: Bucla `for` este folosită pentru a parcurge toate directoarele corespunzătoare pachetelor din
