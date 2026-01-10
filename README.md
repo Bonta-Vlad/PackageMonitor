@@ -3,9 +3,10 @@
 ## Descriere generală: Acest proiect extinde funcționalitățile unui sistem de tip *PackageMonitor*,
 având ca scop analiza și monitorizarea operațiilor efectuate asupra pachetelor
 dintr-un sistem Linux, folosind fișierul de log `/var/log/dpkg.log`.
+
 Proiectul este implementat în Bash și este structurat modular, folosind două scripturi principale:
-  -un script pentru colectarea și organizarea datelor
-  -un script pentru interogarea și analiza informațiilor colectate
+  - un script pentru colectarea și organizarea datelor
+  - un script pentru interogarea și analiza informațiilor colectate
 
 ## Cerințe
   - Sistem de operare Linux
@@ -27,13 +28,16 @@ Directorul `Packages/` este generat automat și conține câte un subdirector pe
     - instalare parțială(half-installed)
   Pentru fiecare pachet identificat, scriptul creează un director și salvează operațiilr asociate într-un
   fișier ops.txt
+  
   Variabile:
     - L_FILE: calea către fișierul de log dpkg.log
+    
   Flux de execuție:
     - Se filtrează liniile relevante din dpkg.log
     - Se extrag numele pachetelor
     - Se creează directoare unice pentru fiecare pachet
     - Se salvează istoricul operațiilor în fișiere separate
+    
   Comenzi utilizate:
     - awk: procesarea și filtrarea fișierului de log
     - sort -u: eliminarea intrărilor duplicate
@@ -43,18 +47,22 @@ Directorul `Packages/` este generat automat și conține câte un subdirector pe
 
 ### Script 2 (pkgmon.sh)
   Al doilea script oferă un front-end simplu pentru interogarea informațiilor generate de primul script.
-  Acesta primește argumente din linia de comandă și afișează starea sau istoricul pachetelor
+  
+  Acesta primește argumente din linia de comandă și afișează starea sau istoricul pachetelor.
+  
   Scriptul se bazează exclusiv pe structura creată în monitor.sh
 
   Argumente interogabile:
     - installed: Afișează pachetele pentru care ultima operație înregistrată este o instalare
     - removed: Afișează pachetele pentru care ultima operație este o dezinstalare
     - history <nume_pachet>: Afișează istoricul complet al operațiilor pentru pachetul specificat
+    
   Flux de execuție:
     - Se parcurg directoarele din `Packages/`
     - Se identifică ultimele operații de tip install și remove
     - Se compară datele operațiilor pentru determinarea stării finale
     - Se afișează rezultatul corespunzător cererii utilizatorului
+    
   Comenzi utilizate:
     - case: utilizată pentru a selecta comportamentul scriptului în funcție de primul argument primit din
     linia de comandă (`$1`), permițând implementarea mai multor funcșionalități într-un singur script.
