@@ -19,17 +19,20 @@ Proiectul este implementat în Bash și este structurat modular, folosind două 
 
 ## Structura datelor generate
 
-\`\`\`
-  .
-  |-monitor.sh
-  |-pkgmon.sh
-  |_Packages/
-    |-apt/
-    | |_ops.txt
-    |-curl/
-    | |_ops.txt
-    |_...
-\`\`\`
+```
+.
+├── monitor.sh
+├── pkgmon.sh
+├── undo_cache.txt
+├── total_size.db
+└── Packages/
+├── apt/
+│ ├── ops.txt
+│ └── size.txt
+├── curl/
+│ └── ops.txt
+└── ...
+```
 
 Directorul `Packages/` este generat automat și conține câte un subdirector pentru fiecare pachet detectat
 în fișierul de log.
