@@ -22,7 +22,7 @@ Proiectul este implementat în Bash și este structurat modular, folosind două 
 ```
 .
 ├── monitor.sh
-├── pkgmon.sh
+├── pkgmonext.sh
 └── Packages/
     ├── apt/
     │   └── ops.txt
@@ -77,9 +77,11 @@ Directorul `Packages/` este generat automat și conține câte un subdirector pe
 
   Argumente interogabile:
   
-    - `installed`: Afișează pachetele pentru care ultima operație înregistrată este o instalare
-    - `removed`: Afișează pachetele pentru care ultima operație este o dezinstalare
-    - `history <nume_pachet>`: Afișează istoricul complet al operațiilor pentru pachetul specificat
+    `installed`: Afișează pachetele pentru care ultima operație înregistrată este o instalare
+    
+    `removed`: Afișează pachetele pentru care ultima operație este o dezinstalare
+    
+     `history <nume_pachet>`: Afișează istoricul complet al operațiilor pentru pachetul specificat
     
   Flux de execuție:
   
