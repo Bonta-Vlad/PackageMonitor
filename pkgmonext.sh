@@ -66,7 +66,15 @@ case $1 in
     done
     echo "Suma dimensiunilor instalate: $total KB" | tee total_size.db
     ;;
-
+"half-installed")
+    for pkg in $(ls Packages); do
+        lastin=$(grep ' installed ' "./Packages/$pkg/ops.txt" | tail -1)
+        lasthalf=$(grep  ' half-installed ' "./Packages/$pkg/ops.txt" | tail -1)
+        if [[ "$lastin" < "$lasthalf" ]]; then 
+            echo "Fisierul $pkg este instalat pe jumatate"
+        fi
+    done
+    ;;
 "undo")
     echo " Undo Cache (LRU) "
     cat Cache.txt
