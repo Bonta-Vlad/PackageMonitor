@@ -71,6 +71,18 @@ case $1 in
     echo " Undo Cache (LRU) "
     grep -h " remove " Packages/*/ops.txt | sort -r | head -5 | awk '{print $4}'
     ;;
+
+"is-first-installed")
+    if grep -q " remove " "./Packages/$2/ops.txt"; then
+            echo "Pachetul $2 a mai fost instalat și șters anterior."
+    else
+        if grep -q " installed " "./Packages/$2/ops.txt"; then
+            echo "Pachetul $2 este la prima instalare în sistem."
+        else
+            echo "Pachetul $2 nu este instalat sau complet"
+        fi
+    fi
+    ;;
 *)
     echo "Ivalid argument"
 
