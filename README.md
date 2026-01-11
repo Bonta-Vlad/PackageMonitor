@@ -25,12 +25,12 @@ Sistemul funcționează în două etape: Parsare/Organizare și Interogare.
         ```Bash
          chmod +x monitor.sh pkgmonext.sh
   3. Inițializare (Rulare Backend): Înainte de a folosi comenzile de interogare, trebuie generată baza de date.
-       ### Bash
+        ```Bash
          ./monitor.sh
-     Notă: Această comandă va crea directorul `Packages/` și fișierul `Cache.txt`.
+  Notă: Această comandă va crea directorul `Packages/` și fișierul `Cache.txt`.
 
 
-## Structura datelor generate
+### Structura datelor generate
 
 ```
 .
