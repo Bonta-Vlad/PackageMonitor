@@ -52,10 +52,13 @@ Directorul `Packages/` este generat automat și conține câte un subdirector pe
     
   Flux de execuție:
   
-    - Se filtrează liniile relevante din dpkg.log
-    - Se extrag numele pachetelor
-    - Se creează directoare unice pentru fiecare pachet
-    - Se salvează istoricul operațiilor în fișiere separate
+     Se filtrează liniile relevante din dpkg.log
+     
+    Se extrag numele pachetelor
+    
+    Se creează directoare unice pentru fiecare pachet
+    
+    Se salvează istoricul operațiilor în fișiere separate
     
   Comenzi utilizate:
   
