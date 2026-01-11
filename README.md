@@ -22,7 +22,7 @@ Sistemul funcționează în două etape: Parsare/Organizare și Interogare.
 ## Configurare
   1. Clonare/Copiere: Salvați scripturile monitor.sh și pkgmonext.sh în același director.
   2. Permisiuni de execuție:
-        ### Bash
+        ```Bash
          chmod +x monitor.sh pkgmonext.sh
   3. Inițializare (Rulare Backend): Înainte de a folosi comenzile de interogare, trebuie generată baza de date.
        ### Bash
