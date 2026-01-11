@@ -68,7 +68,7 @@ Directorul `Packages/` este generat automat și conține câte un subdirector pe
     - `mkdir`: crearea structurii de directoare
     - `grep`: filtrarea operațiilor pentru fiecare pachet
 
-### Script 2 (pkgmon.sh)
+### Script 2 (pkgmonext.sh)
   Al doilea script oferă un front-end simplu pentru interogarea informațiilor generate de primul script.
   
   Acesta primește argumente din linia de comandă și afișează starea sau istoricul pachetelor.
