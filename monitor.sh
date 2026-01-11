@@ -5,5 +5,8 @@ awk '/ status remove | status installed | status half-installed / {split($5,a,":
 for i in `ls Packages`
 do
    awk -v name="$i" '($0 ~ " "name":")&& / remove | installed | half-installed / {print $0}' "$L_FILE" > "./Packages/$i/ops.txt"
+   awk '/ remove / {print $0}' "$L_FILE" > "./temp.txt"
+done
+sort -r -k 1 -k 2 temp.txt | head -n 5 > "./Cache.txt"
+rm temp.txt
 
-done 

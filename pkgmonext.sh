@@ -69,7 +69,7 @@ case $1 in
 
 "undo")
     echo " Undo Cache (LRU) "
-    grep -h " remove " Packages/*/ops.txt | sort -r | head -5 | awk '{print $4}'
+    cat Cache.txt
     ;;
 
 "is-first-installed")
