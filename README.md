@@ -66,8 +66,14 @@ Scriptul de interogare se apelează folosind sintaxa: ./pkgmonext.sh [COMANDĂ] 
 | `total-size` | - | Calculează spațiul total ocupat de pachete. | `./pkgmonext.sh total-size` |
 
 ## Rulare
-### Script 1 (monitor.sh)
-  Primul script analizează fișierul /var/log/dpkg.log și identifică operațiile relevante asupra pachetelor,
+
+### Logica de parsare (monitor.sh)
+  - Extragerea Numelor: Scriptul folosește `awk` cu `split($5,a,":")` pentru a gestiona formatul `nume:arhitectură` (ex: `gzip:amd64` devine `gzip`). Aceasta asigură că directoarele sunt create corect.
+  - Filtrare Contextuală: Se folosește o verificare strictă `($0 ~ " "name":")` în bucla de populare pentru a evita potrivirile parțiale (ex: căutarea pachetului `zip` nu va returna rezultate pentru `gzip`).
+  - Unicitate (`sort -u`): Ordonează alfabetic și elimină duplicatele. Aceasta este crucială pentru performanță: dacă un pachet apare de 50 de ori în log, `mkdir` va fi executat o singură dată.
+  - Cache LRU (Least Recently Used): Fișierul `Cache.txt` este generat prin sortarea descrescătoare a timpului (`sort -r`) și extragerea primelor 5 linii, simulând o stivă de "Undo" pentru operațiile de ștergere.
+
+Primul script analizează fișierul /var/log/dpkg.log și identifică operațiile relevante asupra pachetelor,
   precum:
   
     - instalare(installed)
@@ -102,12 +108,89 @@ Scriptul de interogare se apelează folosind sintaxa: ./pkgmonext.sh [COMANDĂ] 
     - `mkdir`: crearea structurii de directoare
     - `grep`: filtrarea operațiilor pentru fiecare pachet
 
-### Script 2 (pkgmonext.sh)
-  Al doilea script oferă un front-end simplu pentru interogarea informațiilor generate de primul script.
-  
-  Acesta primește argumente din linia de comandă și afișează starea sau istoricul pachetelor.
-  
-  Scriptul se bazează exclusiv pe structura creată în monitor.sh
+### Determinarea stării (pkgmonext.sh)
+Acest modul nu modifică date, ci le interpretează folosind logică condițională și aritmetică.
+
+Acest script funcționează ca un interpretor de comenzi (switch/case), analizând structura de fișiere creată de backend. Iată analiza tehnică pentru fiecare funcție disponibilă:
+
+A. Determinarea Stării (`installed` / `removed`)
+Aceste două funcții reprezintă nucleul logic al scriptului. Ele nu se bazează pe starea curentă a sistemului (care poate fi alterată manual), ci pe cronologia evenimentelor din log.
+  - Logica: Iterează prin toate directoarele din Packages/ și extrage ultimele linii relevante folosind grep ... | tail -1.
+
+  - Algoritm:
+
+    1. Extrage timestamp-ul ultimei instalări (`lastin`).
+
+    2. Extrage timestamp-ul ultimei ștergeri (`lastrem`).
+
+    3. Folosește `readarray` pentru a segmenta linia și a izola data/ora.
+
+    4. Compară string-urile:
+
+    5. Pentru installed: Condiția este `if [[ Data_Install > Data_Remove ]]`.
+
+    6. Pentru removed: Condiția este `if [[ Data_Install <= Data_Remove ]]`.
+
+B. Istoricul Brut (`history`)
+  - Funcționalitate: Afișează toate operațiile înregistrate pentru un pachet specific.
+
+  - Implementare: Verifică simplu existența fișierului Packages/$2/ops.txt. Dacă există, folosește cat pentru a-l afișa la standard output (stdout).
+
+C. Filtrare Temporală (`lst10days`)
+  - Funcționalitate: Identifică orice activitate (instalare sau dezinstalare) din ultimele 10 zile.
+
+  - Implementare:
+
+      1. Calcularea Pragului: Variabila $limit este setată folosind date -d "10 days ago".
+
+      2. Motorul de Căutare: Se folosește awk cu variabila externă limit.
+
+      3. Optimizare: Comparația substr($0,1,19) >= limit se face direct pe șiruri de caractere (format ISO), fiind mult mai rapidă decât conversia fiecărei linii în Unix Timestamp.
+
+D. Analiza Dimensiunii (`size`)
+  - Funcționalitate: Interoghează baza de date dpkg a sistemului pentru dimensiunea pachetului.
+
+  - Implementare:
+
+          - Comanda: dpkg-query -W -f='${Installed-Size} KB\n'.
+
+          - Gestionearea Erorilor: Folosește operatorul || (OR). Dacă dpkg-query returnează eroare (cod de ieșire diferit de 0, adică pachetul nu e găsit), scriptul execută echo "Pachetul nu este instalat", prevenind oprirea abruptă a execuției.
+
+E. Agregarea Datelor (`total-size`)
+Calculează spațiul total ocupat pe disc de către pachetele monitorizate care sunt încă instalate.
+
+1. Inițializează variabila total=0.
+
+2. Parcurge fiecare pachet și îi verifică starea (folosind logica de la punctul A: if [[ "$lastin" > "$lastrem" ]]).
+
+3. Doar dacă pachetul este confirmat ca instalat, interoghează dimensiunea.
+
+4. Aritmetică: Folosește expansiunea aritmetică $((total + size)) pentru a suma valorile.
+
+5. Persistență: Rezultatul este afișat și salvat simultan în total_size.db folosind tee.
+
+F. Detectarea Erorilor (`half-installed`)
+
+Identifică pachetele a căror instalare a fost întreruptă sau a eșuat.
+
+Implementare: Compară timestamp-ul evenimentului installed cu cel al evenimentului half-installed. Dacă half-installed este cel mai recent eveniment, pachetul necesită atenție (posibilă rulare dpkg --configure -a).
+
+G. Cache și Restaurare (`undo`)
+
+Afișează o listă a celor mai recente 5 pachete șterse, utilă pentru a re-instala rapid ceva șters din greșeală.
+
+Implementare: Nu face procesare în timp real. Doar citește (cat) fișierul Cache.txt care a fost pre-calculat și optimizat de scriptul de backend (monitor.sh).
+
+H. Analiza Primei Instalări (`is-first-installed`)
+
+Determină dacă un pachet este la prima sa apariție pe sistem sau dacă a mai fost instalat și șters în trecut.
+
+Implementare:
+    - Folosește grep -q " remove " pe fișierul de operații.
+    - Flag-ul -q (quiet) este crucial: nu afișează nimic, doar returnează codul de ieșire (0 dacă a găsit, 1 dacă nu).
+    - Dacă se găsește un remove, scriptul deduce că pachetul a existat anterior.
+
+
 
   Argumente interogabile:
   
@@ -144,5 +227,7 @@ Scriptul de interogare se apelează folosind sintaxa: ./pkgmonext.sh [COMANDĂ] 
     istoricului operațiilor unui pachet.
     - `Variabila `$1``: reprezintă opțiunea selectată de utilizator (ex. `installed`, `removed`)
     - `Variabila `$2``: reprezintă numele pachetului pentru care se solicită istoricul
-    
+
+
+
     
