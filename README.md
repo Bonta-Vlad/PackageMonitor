@@ -1,21 +1,34 @@
 # Package Monitor Extended. Analiza și organizarea operațiilor dpkg
 
 ## Descriere generală: 
+Package Monitor Extended este o suită de instrumente de analiză și monitorizare pentru sistemele bazate pe Debian/Ubuntu. Scopul principal este de a transforma fișierul de log brut /var/log/dpkg.log într-o bază de date structurată și interogabilă.
 Acest proiect extinde funcționalitățile unui sistem de tip *PackageMonitor*,
 automatizează extragerea datelor din /var/log/dpkg.log și le organizează într-o structură ierarhică de directoare, oferind o interfață rapidă de interogare a stării pachetelor (instalate vs. șterse).
 
 Sistemul funcționează în două etape: Parsare/Organizare și Interogare.
 
-Proiectul este implementat în Bash și este structurat modular, folosind două scripturi principale:
-  - un script pentru colectarea și organizarea datelor
-  - un script pentru interogarea și analiza informațiilor colectate
+## Componente
+  1. Backend(`monitor.sh`): Motorul de procesare. Citește log-urile, curăță datele, elimină duplicatele și populează structura de fișiere.
+  2. Frontend (`pkgmonext.sh`): Interfața CLI (Command Line Interface). Permite utilizatorului să interogheze baza de date creată de backend.
+  3. Stocare (`Packages/`): Structură ierarhică unde fiecare pachet are propriul director și istoric (ops.txt).
 
-## Condiții de utilizare
+## Cerințe și instalare
 
-  - Sistem de operare Linux
+  - OS: Linux (distribuții bazate pe Debian/Ubuntu care folosesc dpkg).
   - Bash
-  - Acces la fișierul `/var/log/dpkg.log`
-  - Utilitare standard: `awk`, `grep`, `sort`, `xargs`
+  - Permisiuni: Drepturi de citire pe /var/log/dpkg.log.
+  - Dependențe: bash, awk, grep, sort, xargs, dpkg-query.
+
+## Configurare
+  1. Clonare/Copiere: Salvați scripturile monitor.sh și pkgmonext.sh în același director.
+  2. Permisiuni de execuție:
+        ### Bash
+         chmod +x monitor.sh pkgmonext.sh
+  3. Inițializare (Rulare Backend): Înainte de a folosi comenzile de interogare, trebuie generată baza de date.
+       ### Bash
+         ./monitor.sh
+     Notă: Această comandă va crea directorul `Packages/` și fișierul `Cache.txt`.
+
 
 ## Structura datelor generate
 
