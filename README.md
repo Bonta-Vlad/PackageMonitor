@@ -47,6 +47,24 @@ Sistemul funcționează în două etape: Parsare/Organizare și Interogare.
 Directorul `Packages/` este generat automat și conține câte un subdirector pentru fiecare pachet detectat
 în fișierul de log.
 
+## Ghid de utilizare
+Scriptul de interogare se apelează folosind sintaxa: ./pkgmonext.sh [COMANDĂ] [ARGUMENT_OPȚIONAL]
+
+| Comandă | Argument | Descriere | Exemplu |
+| :--- | :--- | :--- | :--- |
+| **Status Pachete** | | | |
+| `installed` | - | Listează toate pachetele instalate curent. | `./pkgmonext.sh installed` |
+| `removed` | - | Listează toate pachetele care au fost șterse. | `./pkgmonext.sh removed` |
+| `half-installed` | - | Identifică pachetele cu instalare eșuată/incompletă. | `./pkgmonext.sh half-installed` |
+| **Analiză & Istoric** | | | |
+| `history` | `<nume_pachet>` | Afișează tot istoricul operațiilor pentru un pachet. | `./pkgmonext.sh history vim` |
+| `lst10days` | - | Afișează toate operațiile din ultimele 10 zile. | `./pkgmonext.sh lst10days` |
+| `is-first-installed`| `<nume_pachet>` | Verifică dacă pachetul e la prima instalare absolută. | `./pkgmonext.sh is-first-installed zip` |
+| `undo` | - | Arată ultimele 5 pachete șterse (ref rapidă). | `./pkgmonext.sh undo` |
+| **Metrici** | | | |
+| `size` | `<nume_pachet>` | Afișează dimensiunea unui pachet instalat (KB). | `./pkgmonext.sh size nano` |
+| `total-size` | - | Calculează spațiul total ocupat de pachete. | `./pkgmonext.sh total-size` |
+
 ## Rulare
 ### Script 1 (monitor.sh)
   Primul script analizează fișierul /var/log/dpkg.log și identifică operațiile relevante asupra pachetelor,
