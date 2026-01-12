@@ -192,7 +192,7 @@ Implementare:
 
 
 
-  Argumente interogabile:
+  Exemple de argumente interogabile:
   
     `installed`: Afișează pachetele pentru care ultima operație înregistrată este o instalare
     
