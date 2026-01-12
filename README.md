@@ -161,33 +161,33 @@ Calculează spațiul total ocupat pe disc de către pachetele monitorizate care 
 
 1. Inițializează variabila total=0.
 
-2. Parcurge fiecare pachet și îi verifică starea (folosind logica de la punctul A: if [[ "$lastin" > "$lastrem" ]]).
+2. Parcurge fiecare pachet și îi verifică starea (folosind logica de la punctul A: `if [[ "$lastin" > "$lastrem" ]]`).
 
 3. Doar dacă pachetul este confirmat ca instalat, interoghează dimensiunea.
 
-4. Aritmetică: Folosește expansiunea aritmetică $((total + size)) pentru a suma valorile.
+4. Aritmetică: Folosește expansiunea aritmetică `$((total + size))` pentru a suma valorile.
 
-5. Persistență: Rezultatul este afișat și salvat simultan în total_size.db folosind tee.
+5. Persistență: Rezultatul este afișat și salvat simultan în `total_size.db` folosind `tee`.
 
 F. Detectarea Erorilor (`half-installed`)
 
 Identifică pachetele a căror instalare a fost întreruptă sau a eșuat.
 
-Implementare: Compară timestamp-ul evenimentului installed cu cel al evenimentului half-installed. Dacă half-installed este cel mai recent eveniment, pachetul necesită atenție (posibilă rulare dpkg --configure -a).
+Implementare: Compară timestamp-ul evenimentului `installed` cu cel al evenimentului `half-installed`. Dacă `half-installed` este cel mai recent eveniment, pachetul necesită atenție (posibilă rulare dpkg --configure -a).
 
 G. Cache și Restaurare (`undo`)
 
 Afișează o listă a celor mai recente 5 pachete șterse, utilă pentru a re-instala rapid ceva șters din greșeală.
 
-Implementare: Nu face procesare în timp real. Doar citește (cat) fișierul Cache.txt care a fost pre-calculat și optimizat de scriptul de backend (monitor.sh).
+Implementare: Nu face procesare în timp real. Doar citește (`cat`) fișierul `Cache.txt` care a fost pre-calculat și optimizat de scriptul de backend (`monitor.sh`).
 
 H. Analiza Primei Instalări (`is-first-installed`)
 
 Determină dacă un pachet este la prima sa apariție pe sistem sau dacă a mai fost instalat și șters în trecut.
 
 Implementare:
-    - Folosește grep -q " remove " pe fișierul de operații.
-    - Flag-ul -q (quiet) este crucial: nu afișează nimic, doar returnează codul de ieșire (0 dacă a găsit, 1 dacă nu).
+    - Folosește `grep -q " remove "` pe fișierul de operații.
+    - Flag-ul `-q` (quiet) este crucial: nu afișează nimic, doar returnează codul de ieșire (0 dacă a găsit, 1 dacă nu).
     - Dacă se găsește un remove, scriptul deduce că pachetul a existat anterior.
 
 
